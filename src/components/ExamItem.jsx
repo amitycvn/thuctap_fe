@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { styled } from '@mui/material/styles';
+import { useDispatch } from 'react-redux';
+import { getUserTest } from '../redux/actions/UserTestAction';
 
 const StyledCard = styled('div')(({ theme }) => ({
     borderRadius: theme.shape.borderRadius,
@@ -18,9 +20,11 @@ const StyledCard = styled('div')(({ theme }) => ({
 }));
 
 export default function ExamItem({ data }) {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleStartExam = () => {
+        dispatch(getUserTest(data))
         navigate(`/exam/detail/${data.id}`);
     };
 

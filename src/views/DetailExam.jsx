@@ -9,8 +9,10 @@ import FormLabel from "@mui/material/FormLabel";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Alert from '@mui/material/Alert';
+import { useSelector } from "react-redux";
 
 export default function DetailExam() {
+    const {userTest} = useSelector((state)=>{return state.userTest})
     const { id } = useParams();
     const [questions, setQuestions] = useState([]);
     const [userAnswers, setUserAnswers] = useState({});
@@ -93,7 +95,9 @@ export default function DetailExam() {
         const publicKey = sessionStorage.getItem('public_key'); // Retrieve public_key from session storage
 
         // Send results to API
+        
         const data = {
+            UserTestID: userTest.id,
             TotalQuestions: questions.length,
             CorrectAnswers: count,
             Score: (count / questions.length) * 10,

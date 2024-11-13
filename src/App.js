@@ -12,24 +12,24 @@ import ApprovalList from "./components/ApprovalList";
 import "./App.css";
 
 function App() {
-    return (
-        <div className="App">
-            <Router>
-                <Routes>
-                    <Route element={<Layout />}>
-                        <Route path="/" element={<ListAll />} />
-                        {/* <Route path="/create" element={<CreateNFT />} /> */}
-                        <Route path="/showTest" element={<TestList />} />
-                        <Route path="/createTest" element={<CreateTestPage />} />
-                        <Route path="/approvals" element={<ApprovalList />} />
-                        <Route path="/exam/detail/:id" element={<DetailExam />} />
-                        <Route path="/exam" element={<Exams />} />
-                        <Route path="/CreateUniqueAsset" element={<CreateUniqueAsset />} />
-                    </Route>
-                </Routes>
-            </Router>
-        </div>
-    );
+  return (
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<ListAll />} />
+            <Route path="/create" element={<CreateNFT />} />
+            <Route path="/showTest" element={<TestList />} />
+            <Route path="/createTest" element={<CreateTestPage />} />
+            <Route path="/approvals" element={<ApprovalList />} />
+            <Route path="/exam/detail/:id" element={<DetailExam />} />
+            <Route path="/exam" element={<Exams />} />
+            <Route path="/CreateUniqueAsset" element={<CreateUniqueAsset />} />
+          </Route>
+        </Routes>
+      </Router>
+    </div>
+  );
 }
 
 export default App;
