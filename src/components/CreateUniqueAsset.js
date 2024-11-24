@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import React, { useState } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
 const CreateUniqueAsset = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [attributes, setAttributes] = useState([{ traitType: '', value: '' }]);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [attributes, setAttributes] = useState([{ traitType: "", value: "" }]);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
 
@@ -17,31 +17,36 @@ const CreateUniqueAsset = () => {
   };
 
   const addAttribute = () => {
-    setAttributes([...attributes, { traitType: '', value: '' }]);
+    setAttributes([...attributes, { traitType: "", value: "" }]);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     const options = {
-      method: 'POST',
-      url: 'https://api.gameshift.dev/nx/unique-assets',
+      method: "POST",
+      url: "https://api.gameshift.dev/nx/unique-assets",
       headers: {
-        accept: 'application/json',
-        'x-api-key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJmYzAxNjMzZS0yNzFhLTQ2ZGEtOGUyZC1lYjVjNTAxODcyNzMiLCJzdWIiOiIxMWE4ODUxZC03ZWViLTQyNjktYTMzOS05MGZiNzAyZjFjYzMiLCJpYXQiOjE3MjE2MzM5MDB9.LRGC8FSwaSogOSbZ50Fnjw_v1Y7T_BcSJCVuG08Inqc', // Thay YOUR_API_KEY_HERE bằng API key thực tế của bạn
-        'content-type': 'application/json'
+        accept: "application/json",
+        "x-api-key":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic", // Thay YOUR_API_KEY_HERE bằng API key thực tế của bạn
+        "content-type": "application/json",
       },
       data: {
         details: {
-          //attributes: attributes,
-          collectionId: '6cfdd0b2-9e0c-43ce-8311-eb0f622f330f', // Giá trị cố định
+          attributes: [{ traitType: "level", value: "high" }],
+          collectionId: "4eda06ed-b497-4941-af90-ceae9c655aee", // Giá trị cố định
           description: description,
           imageUrl: imageUrl,
           name: name,
-          price: 3
+          price: {
+            currencyId: "USDC",
+            naturalAmount: "2.00",
+          },
         },
-        destinationUserReferenceId: '1', // Giá trị cố định
-      }
+        destinationUserReferenceId:
+          "A7JW7U72LNKU3mKk3WgYrUdtC7fdF3vrrgVXesdjqr7e", // Giá trị cố định ví của shop
+      },
     };
 
     try {
@@ -117,15 +122,27 @@ const CreateUniqueAsset = () => {
             />
           </div>
         ))} */}
-        <button type="button" className="btn btn-secondary mt-3" onClick={addAttribute}>
+        <button
+          type="button"
+          className="btn btn-secondary mt-3"
+          onClick={addAttribute}
+        >
           Add Another Attribute
         </button>
         <button type="submit" className="btn btn-primary mt-3">
           Submit
         </button>
       </form>
-      {response && <pre className="mt-3">Response: {JSON.stringify(response, null, 2)}</pre>}
-      {error && <pre className="mt-3 text-danger">Error: {JSON.stringify(error, null, 2)}</pre>}
+      {response && (
+        <pre className="mt-3">
+          Response: {JSON.stringify(response, null, 2)}
+        </pre>
+      )}
+      {error && (
+        <pre className="mt-3 text-danger">
+          Error: {JSON.stringify(error, null, 2)}
+        </pre>
+      )}
     </div>
   );
 };

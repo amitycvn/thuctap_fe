@@ -10,6 +10,8 @@ import CreateUniqueAsset from "./components/CreateUniqueAsset";
 import Layout from "./components/Layout";
 import ApprovalList from "./components/ApprovalList";
 import "./App.css";
+import ListNFT from "./views/ListNFT";
+import BuyNFT from "./views/BuyNFT";
 
 function App() {
   return (
@@ -18,13 +20,15 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<ListAll />} />
-            <Route path="/create" element={<CreateNFT />} />
+            {/* <Route path="/create" element={<CreateNFT />} /> */}
             <Route path="/showTest" element={<TestList />} />
             <Route path="/createTest" element={<CreateTestPage />} />
             <Route path="/approvals" element={<ApprovalList />} />
             <Route path="/exam/detail/:id" element={<DetailExam />} />
             <Route path="/exam" element={<Exams />} />
             <Route path="/CreateUniqueAsset" element={<CreateUniqueAsset />} />
+            <Route path="/listNFT" element={<ListNFT />} />
+            <Route path="/buyNFT" element={<BuyNFT />} />
           </Route>
         </Routes>
       </Router>
