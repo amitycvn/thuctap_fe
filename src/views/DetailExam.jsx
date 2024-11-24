@@ -71,10 +71,8 @@ export default function DetailExam() {
     }, []);
 
     const handleSubmit = useCallback(async () => {
-        clearInterval(timerIdRef.current); // Stop the timer
-        setTimeTaken(10 * 60 - timeLeft); // Calculate time taken
-
-        //console.log("User Answers:", userAnswers); // Check the user answers
+        clearInterval(timerIdRef.current);
+        setTimeTaken(10 * 60 - timeLeft);
 
         const newResults = {};
         let count = 0;
@@ -82,7 +80,6 @@ export default function DetailExam() {
             const userAnswer = userAnswers[question.id];
             const correctAnswer = question.CorrectOption;
             const isCorrect = userAnswer == correctAnswer;
-            //console.log(`Question ID: ${question.id}, User Answer: ${userAnswer}, Correct Answer: ${correctAnswer}, Is Correct: ${isCorrect}`);
             newResults[question.id] = isCorrect;
             if (isCorrect) {
                 count++;
@@ -92,10 +89,8 @@ export default function DetailExam() {
         setCorrectCount(count);
         setSubmitted(true);
 
-        const publicKey = sessionStorage.getItem('public_key'); // Retrieve public_key from session storage
+        const publicKey = sessionStorage.getItem('public_key');
 
-        // Send results to API
-        
         const data = {
             UserTestID: userTest.id,
             TotalQuestions: questions.length,
@@ -103,65 +98,38 @@ export default function DetailExam() {
             Score: (count / questions.length) * 10,
             time_work: 3 * 60 - timeLeft,
             next_page: tabSwitches,
-            public_key: publicKey, // Use public_key here
+            public_key: publicKey,
         };
 
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/submit-result', data);
             console.log('Result saved successfully', response.data);
 
-            // Check conditions for creating unique asset
-            if (count > 1 && tabSwitches <= 2) {
-                const assetResponse = await createUniqueAsset();
-                if (assetResponse && assetResponse.id) {
-                    // Set the asset ID in session storage
-                    sessionStorage.setItem('unique_asset_id', assetResponse.id);
-                    setShowTransferButton(true);
-                    setMessage("Bạn đã đạt yêu cầu. Nhấn 'Nhận chứng chỉ' để nhận.");
-                }
+            if (count >= 2 && tabSwitches <= 2) {
+                setShowTransferButton(true);
+                setMessage("Bạn đã đạt yêu cầu. Nhấn 'Nhận chứng chỉ' để nhận.");
             } else {
-                setMessage("Bạn phải trả lời đúng trên 20 câu và số lần chuyển tab không quá 2 lần mới được nhận chứng chỉ.");
+                let errorMessage = [];
+                if (count <= 2) {
+                    errorMessage.push("Bạn cần trả lời đúng trên 2 câu");
+                }
+                if (tabSwitches > 2) {
+                    errorMessage.push("Số lần chuyển tab không được quá 2 lần");
+                }
+                setMessage(errorMessage.join(" và ") + " để nhận chứng chỉ.");
+                setShowTransferButton(false);
             }
         } catch (error) {
-            console.error('There was an error saving the result or creating the unique asset!', error);
+            console.error('There was an error saving the result!', error);
+            setMessage("Có lỗi xảy ra khi lưu kết quả. Vui lòng thử lại.");
         }
     }, [questions, userAnswers, timeLeft, tabSwitches]);
 
-    const createUniqueAsset = async () => {
-        const options = {
-            method: 'POST',
-            url: 'https://api.gameshift.dev/nx/unique-assets',
-            headers: {
-                accept: 'application/json',
-                'x-api-key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJmYzAxNjMzZS0yNzFhLTQ2ZGEtOGUyZC1lYjVjNTAxODcyNzMiLCJzdWIiOiIxMWE4ODUxZC03ZWViLTQyNjktYTMzOS05MGZiNzAyZjFjYzMiLCJpYXQiOjE3MjE2MzM5MDB9.LRGC8FSwaSogOSbZ50Fnjw_v1Y7T_BcSJCVuG08Inqc',
-                'content-type': 'application/json'
-            },
-            data: {
-                details: {
-                    collectionId: '6cfdd0b2-9e0c-43ce-8311-eb0f622f330f',
-                    description: 'abc',
-                    imageUrl: 'https://pngimg.com/uploads/certified/certified_PNG14.png',
-                    name: 'Certification'
-                },
-                destinationUserReferenceId: '1',
-            }
-        };
-
-        try {
-            const response = await axios.request(options);
-            console.log('Unique Asset created successfully', response.data);
-            return response.data;
-        } catch (error) {
-            console.error('There was an error creating the unique asset!', error);
-            throw error;
-        }
-    };
-
-    const storeApproval = async (publicKey, consentUrl) => {
+    const storeApproval = async (publicKey, testId) => {
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/post-approval', {
                 public_key: publicKey,
-                consent_url: consentUrl,
+                consent_url: testId,
                 status: 0,
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
@@ -171,31 +139,39 @@ export default function DetailExam() {
             console.error('There was an error storing the approval!', error);
         }
     };
+  
 
-    const transferItem = async (itemId) => {
+    const createNFTForUser = async (itemId) => {
         const publicKey = sessionStorage.getItem('public_key');
-        const options = {
-            method: 'POST',
-            url: `https://api.gameshift.dev/nx/users/1/items/${itemId}/transfer`,
-            headers: {
-                accept: 'application/json',
-                'x-api-key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJmYzAxNjMzZS0yNzFhLTQ2ZGEtOGUyZC1lYjVjNTAxODcyNzMiLCJzdWIiOiIxMWE4ODUxZC03ZWViLTQyNjktYTMzOS05MGZiNzAyZjFjYzMiLCJpYXQiOjE3MjE2MzM5MDB9.LRGC8FSwaSogOSbZ50Fnjw_v1Y7T_BcSJCVuG08Inqc',
-                'content-type': 'application/json',
-            },
-            data: {
-                destinationWallet: publicKey,
-                quantity: '1',
-            },
-        };
-
+        
         try {
+            await storeApproval(publicKey, id);
+
+            const options = {
+                method: 'POST',
+                url: 'https://api.gameshift.dev/nx/unique-assets',
+                headers: {
+                    accept: 'application/json',
+                    'x-api-key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic',
+                    'content-type': 'application/json'
+                },
+                data: {
+                    details: {
+                        attributes: [{traitType: 'id_test', value: id}],
+                        collectionId: '4eda06ed-b497-4941-af90-ceae9c655aee',
+                        description: 'Congratulations on completing test ' + id,
+                        imageUrl: 'https://crossmint.myfilebase.com/ipfs/QmQLoLxkb67oL79WJHTadDTLfjTH7EuExAkNtEyBY1eiu8',
+                        name: 'Approved Test ' + id
+                    },
+                    destinationUserReferenceId: publicKey
+                }
+            };
+
             const response = await axios.request(options);
             console.log('Item transferred successfully', response.data);
-
-            const consentUrl = response.data.consentUrl;
-            await storeApproval(publicKey, consentUrl);
         } catch (error) {
-            console.error('There was an error transferring the item!', error);
+            console.error('There was an error in the process!', error);
+            throw error;
         }
     };
 
@@ -322,17 +298,16 @@ export default function DetailExam() {
                             variant="contained"
                             className="w-[100%] !my-3"
                             onClick={async () => {
-                                const uniqueAssetId = sessionStorage.getItem('unique_asset_id');
-                                if (uniqueAssetId) {
-                                    alert('Chứng chỉ sẽ được gửi đến ví của bạn sau ít phút nữa')
+                                try {
+                                    alert('Chứng chỉ sẽ được gửi đến ví của bạn sau ít phút nữa');
                                     setShowTransferButton(false);
-                                    await new Promise(resolve => setTimeout(resolve, 30000));
-                                    await transferItem(uniqueAssetId);
-                                    
+                                    await new Promise(resolve => setTimeout(resolve, 1000));
+                                    await createNFTForUser(id);
+                                } catch (error) {
+                                    setMessage("Có lỗi xảy ra khi tạo chứng chỉ. Vui lòng thử lại.");
+                                    setShowTransferButton(true);
                                 }
-                                
                             }}
-                            
                         >
                             Nhận chứng chỉ
                         </Button>
