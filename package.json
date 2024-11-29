@@ -8,6 +8,7 @@
     "@mui/icons-material": "^5.16.4",
     "@mui/material": "^5.16.2",
     "@shyft-to/js": "^0.2.39",
+    "@solana/spl-token": "^0.4.9",
     "@solana/wallet-adapter-phantom": "^0.9.7",
     "@solana/web3.js": "^1.50.0",
     "@testing-library/jest-dom": "^5.17.0",
