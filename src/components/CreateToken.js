@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Keypair } from '@solana/web3.js';
 import { TokenService } from '../services/tokenService.js';
+import { AirdropToken } from './AirdropToken.js';
+
 
 export const CreateToken = () => {
     const [tokenInfo, setTokenInfo] = useState(null);
@@ -40,40 +42,45 @@ export const CreateToken = () => {
     };
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4">Create New Token</h2>
-            
-            <button
-                onClick={handleCreateToken}
-                disabled={isLoading}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg disabled:opacity-50"
-            >
-                {isLoading ? 'Creating...' : 'Create Token'}
-            </button>
+        <div className="space-y-6">
+            <div className="p-4 bg-white rounded-lg shadow">
+                <h2 className="text-2xl font-bold mb-4">Create New Token</h2>
+                
+                <button
+                    onClick={handleCreateToken}
+                    disabled={isLoading}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-lg disabled:opacity-50"
+                >
+                    {isLoading ? 'Creating...' : 'Create Token'}
+                </button>
 
-            {error && (
-                <div className="mt-4 text-red-500">
-                    {error}
-                </div>
-            )}
-
-            {tokenInfo && (
-                <div className="mt-4">
-                    <h3 className="text-lg font-semibold">Token Created Successfully!</h3>
-                    <div className="mt-2">
-                        <p className="text-sm">
-                            <span className="font-medium">Token Address:</span>
-                            <br />
-                            {tokenInfo.tokenAddress}
-                        </p>
-                        <p className="text-sm mt-2">
-                            <span className="font-medium">Token Account:</span>
-                            <br />
-                            {tokenInfo.tokenAccount}
-                        </p>
+                {error && (
+                    <div className="mt-4 text-red-500">
+                        {error}
                     </div>
-                </div>
-            )}
+                )}
+
+                {tokenInfo && (
+                    <div className="mt-4">
+                        <h3 className="text-lg font-semibold">Token Created Successfully!</h3>
+                        <div className="mt-2">
+                            <p className="text-sm">
+                                <span className="font-medium">Token Address:</span>
+                                <br />
+                                {tokenInfo.tokenAddress}
+                            </p>
+                            <p className="text-sm mt-2">
+                                <span className="font-medium">Token Account:</span>
+                                <br />
+                                {tokenInfo.tokenAccount}
+                            </p>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <AirdropToken tokenMintAddress="EawY8hMipRETvdcX3RPqNPT2ziD3m6kSh5xg5Ypxsppc" />
+           
         </div>
     );
 }; 
