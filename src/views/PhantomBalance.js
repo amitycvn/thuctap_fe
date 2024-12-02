@@ -46,6 +46,7 @@ const PhantomBalance = () => {
       // Lọc và hiển thị tất cả USDC accounts (có thể có nhiều account USDC)
       const usdcAccounts = tokenAccounts.value.filter((account) => {
         const mintAddress = account.account.data.parsed.info.mint;
+        console.log(mintAddress);
         const tokenBalance =
           account.account.data.parsed.info.tokenAmount.uiAmount;
         // Chỉ lấy những account có số dư > 0

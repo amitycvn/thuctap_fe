@@ -155,7 +155,9 @@ export default function Exams() {
                 <Link to="/buyNFT">
                     <button className='btn btn-warning'>Mua chứng chỉ</button>
                 </Link>
-
+                <Link to="/marketplace">
+                    <button className='btn btn-info'>Marketplace</button>
+                </Link>
                 <Link
                     to="/create-token"
                     className="block px-4 py-2 hover:bg-gray-700 rounded"
