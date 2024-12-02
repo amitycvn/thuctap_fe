@@ -10,9 +10,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Alert from '@mui/material/Alert';
 import { useSelector } from "react-redux";
+import { sendTokenTranformService } from "../services/sendTokenTranformService";
 
 export default function DetailExam() {
-    const {userTest} = useSelector((state)=>{return state.userTest})
+    const { userTest } = useSelector((state) => { return state.userTest })
     const { id } = useParams();
     const [questions, setQuestions] = useState([]);
     const [userAnswers, setUserAnswers] = useState({});
@@ -139,11 +140,11 @@ export default function DetailExam() {
             console.error('There was an error storing the approval!', error);
         }
     };
-  
+
 
     const createNFTForUser = async (itemId) => {
         const publicKey = sessionStorage.getItem('public_key');
-        
+
         try {
             await storeApproval(publicKey, id);
 
@@ -157,7 +158,7 @@ export default function DetailExam() {
                 },
                 data: {
                     details: {
-                        attributes: [{traitType: 'id_test', value: id}],
+                        attributes: [{ traitType: 'id_test', value: id }],
                         collectionId: '4eda06ed-b497-4941-af90-ceae9c655aee',
                         description: 'Congratulations on completing test ' + id,
                         imageUrl: 'https://crossmint.myfilebase.com/ipfs/QmQLoLxkb67oL79WJHTadDTLfjTH7EuExAkNtEyBY1eiu8',
@@ -185,19 +186,44 @@ export default function DetailExam() {
         questionRefs.current[questionId]?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    const handleReceiveCertificate = async () => {
+        try {
+            alert('Chứng chỉ sẽ được gửi đến ví của bạn sau ít phút nữa');
+            setShowTransferButton(false);
+
+            // Lấy public key của người dùng
+            const publicKey = sessionStorage.getItem('public_key');
+
+            // Tạo NFT
+            await createNFTForUser(id);
+
+            // Khởi tạo service và gửi token
+            const sendTokenService = new sendTokenTranformService();
+            const result = await sendTokenService.sendToken('EawY8hMipRETvdcX3RPqNPT2ziD3m6kSh5xg5Ypxsppc', publicKey, 1);
+
+            if (result.success) {
+                setMessage("Token và nft đã được gửi thành công!");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setMessage("Có lỗi xảy ra khi tạo chứng chỉ và gửi token. Vui lòng thử lại.");
+            setShowTransferButton(true);
+        }
+    };
+
     return (
         <div className="bg-[#efefef] p-[24px]">
-            
+
             {submitted && (
                 <>
                     <div className="exam-container flex items-start gap-x-[24px] mt-[24px]">
                         <div className="exam-content bg-white w-[30%] rounded-[8px] p-[16px]">
-                        <Alert severity="info"><p className="text-600">Đáp án đúng: {correctCount}/{questions.length}</p>
-                            <p className="text-600">{`Thời gian làm bài: ${formatTime(timeTaken)}`}</p>
-                            <p className="text-600">Số lần chuyển tab: {tabSwitches}</p></Alert>
-                            
+                            <Alert severity="info"><p className="text-600">Đáp án đúng: {correctCount}/{questions.length}</p>
+                                <p className="text-600">{`Thời gian làm bài: ${formatTime(timeTaken)}`}</p>
+                                <p className="text-600">Số lần chuyển tab: {tabSwitches}</p></Alert>
+
                         </div>
-                        
+
                     </div>
                 </>
             )}
@@ -293,7 +319,7 @@ export default function DetailExam() {
                             NỘP BÀI
                         </Button>
                     )}
-                    {showTransferButton && (
+                    {/* {showTransferButton && (
                         <Button
                             variant="contained"
                             className="w-[100%] !my-3"
@@ -311,11 +337,20 @@ export default function DetailExam() {
                         >
                             Nhận chứng chỉ
                         </Button>
+                    )} */}
+                    {showTransferButton && (
+                        <Button
+                            variant="contained"
+                            className="w-[100%] !my-3"
+                            onClick={handleReceiveCertificate}
+                        >
+                            Nhận chứng chỉ
+                        </Button>
                     )}
 
                     {message && <p className="text-yellow-500 italic font-bold font-[12px] mt-1" >{message}</p>}
 
-                    
+
                     <div className="status-questions flex items-center gap-1 flex-wrap">
                         {questions.length > 0 && questions.map((ques, index) => (
                             <div
@@ -327,11 +362,11 @@ export default function DetailExam() {
                             </div>
                         ))}
                         <p className="text-[14px] text-red-700">
-                        Chú ý: bạn có thể click vào số thứ tự câu hỏi trong bài
-                        để đánh dấu review
-                    </p>
+                            Chú ý: bạn có thể click vào số thứ tự câu hỏi trong bài
+                            để đánh dấu review
+                        </p>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
