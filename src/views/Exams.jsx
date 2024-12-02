@@ -4,12 +4,12 @@ import axios from 'axios';
 import ExamItem from '../components/ExamItem';
 import { Link } from 'react-router-dom';
 import {
-  Card,
-  Typography,
-  Box,
-  LinearProgress,
-  Button,
-  Alert
+    Card,
+    Typography,
+    Box,
+    LinearProgress,
+    Button,
+    Alert
 } from '@mui/material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
@@ -21,24 +21,24 @@ export default function Exams() {
     const [claimedRewards, setClaimedRewards] = useState([]);
 
     const rewards = [
-        { 
+        {
             id: "reward_basic",
-            threshold: 1, 
-            name: "Mốc thưởng cơ bản", 
+            threshold: 1,
+            name: "Mốc thưởng cơ bản",
             description: "Hoàn thành bài thi đầu tiên",
             imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTljoPNHNoSKvICEdoMStryO63bZ9FUkn1GA&s"
         },
-        { 
+        {
             id: "reward_intermediate",
-            threshold: 3, 
-            name: "Mốc thưởng trung cấp", 
+            threshold: 3,
+            name: "Mốc thưởng trung cấp",
             description: "Hoàn thành 3 bài thi",
             imageUrl: "https://static.ffx.io/images/$zoom_0.473%2C$multiply_1.545%2C$ratio_1%2C$width_378%2C$x_0%2C$y_0/t_crop_custom/q_86%2Cf_auto/d22d363b42bd80403a8a0847e21360116d15edfa"
         },
-        { 
+        {
             id: "reward_advanced",
-            threshold: 5, 
-            name: "Mốc thưởng cao cấp", 
+            threshold: 5,
+            name: "Mốc thưởng cao cấp",
             description: "Hoàn thành 5 bài thi",
             imageUrl: "https://www.cnet.com/a/img/resize/e547a2e4388fcc5ab560f821ac170a59b9fb0143/hub/2021/12/13/d319cda7-1ddd-4855-ac55-9dcd9ce0f6eb/unnamed.png?auto=webp&fit=crop&height=1200&width=1200"
         }
@@ -56,7 +56,7 @@ export default function Exams() {
             },
             data: {
                 details: {
-                    attributes: [{traitType: traitType, value: value}],
+                    attributes: [{ traitType: traitType, value: value }],
                     collectionId: '253ae962-7962-4818-bdcf-7b7f59dfb6e2',
                     description: description,
                     imageUrl: imageUrl,
@@ -155,6 +155,14 @@ export default function Exams() {
                 <Link to="/buyNFT">
                     <button className='btn btn-warning'>Mua chứng chỉ</button>
                 </Link>
+
+                <Link
+                    to="/create-token"
+                    className="block px-4 py-2 hover:bg-gray-700 rounded"
+                >
+                    Create Token
+                </Link>
+
             </div>
 
             {/* Rewards Section */}
@@ -177,9 +185,9 @@ export default function Exams() {
                             <Typography variant="subtitle1" gutterBottom>
                                 Tiến độ: {totalRecords} bài thi đã hoàn thành
                             </Typography>
-                            <LinearProgress 
-                                variant="determinate" 
-                                value={(totalRecords / 5) * 100} 
+                            <LinearProgress
+                                variant="determinate"
+                                value={(totalRecords / 5) * 100}
                                 sx={{ height: 8, borderRadius: 4 }}
                             />
                         </Box>
@@ -195,8 +203,8 @@ export default function Exams() {
                                     }}
                                 >
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                        <EmojiEventsIcon 
-                                            color={getRewardStatus(reward.threshold, reward.id) === 'locked' ? 'disabled' : 'primary'} 
+                                        <EmojiEventsIcon
+                                            color={getRewardStatus(reward.threshold, reward.id) === 'locked' ? 'disabled' : 'primary'}
                                             sx={{ fontSize: 32 }}
                                         />
                                         <Box flex={1}>
@@ -210,8 +218,8 @@ export default function Exams() {
                                                 Yêu cầu: {reward.threshold} bài thi
                                             </Typography>
                                             {getRewardStatus(reward.threshold, reward.id) === 'claimed' && (
-                                                <Typography 
-                                                    variant="body2" 
+                                                <Typography
+                                                    variant="body2"
                                                     color="success.main"
                                                     sx={{ mt: 1, fontStyle: 'italic' }}
                                                 >

@@ -12,6 +12,9 @@ import ApprovalList from "./components/ApprovalList";
 import "./App.css";
 import ListNFT from "./views/ListNFT";
 import BuyNFT from "./views/BuyNFT";
+import { CreateToken } from "./components/CreateToken.js";
+
+
 
 function App() {
   return (
@@ -29,6 +32,7 @@ function App() {
             <Route path="/CreateUniqueAsset" element={<CreateUniqueAsset />} />
             <Route path="/listNFT" element={<ListNFT />} />
             <Route path="/buyNFT" element={<BuyNFT />} />
+            <Route path="/create-token" element={<CreateToken/>} />
           </Route>
         </Routes>
       </Router>
