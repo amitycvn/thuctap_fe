@@ -20,7 +20,7 @@ const NFTDetail = ({ nft, onClose }) => {
   const [error, setError] = useState(null);
   const [showTransfer, setShowTransfer] = useState(false);
 
-  const isListed = nft.priceCents !== null;
+  const isListed = nft.forSale !== false;
 
   const handleListForSale = async () => {
     if (!price || isNaN(price) || price <= 0) {
@@ -33,8 +33,7 @@ const NFTDetail = ({ nft, onClose }) => {
       url: `https://api.gameshift.dev/nx/unique-assets/${nft.id}/list-for-sale`,
       headers: {
         accept: "application/json",
-        "x-api-key":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic",
+        "x-api-key": process.env.REACT_APP_X_API_KEY,
         "content-type": "application/json",
       },
       data: {
@@ -66,8 +65,7 @@ const NFTDetail = ({ nft, onClose }) => {
       url: `https://api.gameshift.dev/nx/unique-assets/${nft.id}/cancel-listing`,
       headers: {
         accept: "application/json",
-        "x-api-key":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic",
+        "x-api-key": process.env.REACT_APP_X_API_KEY,
       },
     };
 

@@ -31,8 +31,7 @@ const ListAll = () => {
       url: url,
       headers: {
         accept: "application/json",
-        "x-api-key":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic",
+        "x-api-key": process.env.REACT_APP_X_API_KEY,
       },
     };
 
@@ -52,8 +51,7 @@ const ListAll = () => {
       url: "https://api.gameshift.dev/nx/users",
       headers: {
         accept: "application/json",
-        "x-api-key":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic",
+        "x-api-key": process.env.REACT_APP_X_API_KEY,
         "content-type": "application/json",
       },
       data: {

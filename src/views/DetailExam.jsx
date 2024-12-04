@@ -153,7 +153,7 @@ export default function DetailExam() {
                 url: 'https://api.gameshift.dev/nx/unique-assets',
                 headers: {
                     accept: 'application/json',
-                    'x-api-key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic',
+                    'x-api-key': process.env.REACT_APP_X_API_KEY,
                     'content-type': 'application/json'
                 },
                 data: {
@@ -188,6 +188,10 @@ export default function DetailExam() {
 
     const handleReceiveCertificate = async () => {
         try {
+            // Tính tổng điểm dựa trên số câu đúng
+            const totalScore = (correctCount / questions.length) * 10; // Chuyển đổi sang thang điểm 10
+            const roundedScore = Math.floor(totalScore); // Làm tròn xuống
+
             alert('Chứng chỉ sẽ được gửi đến ví của bạn sau ít phút nữa');
             setShowTransferButton(false);
 
@@ -197,12 +201,16 @@ export default function DetailExam() {
             // Tạo NFT
             await createNFTForUser(id);
 
-            // Khởi tạo service và gửi token
+            // Khởi tạo service và gửi token tương ứng với điểm số
             const sendTokenService = new sendTokenTranformService();
-            const result = await sendTokenService.sendToken('EawY8hMipRETvdcX3RPqNPT2ziD3m6kSh5xg5Ypxsppc', publicKey, 1);
+            const result = await sendTokenService.sendToken(
+                'EawY8hMipRETvdcX3RPqNPT2ziD3m6kSh5xg5Ypxsppc', 
+                publicKey, 
+                roundedScore // Sử dụng điểm đã làm tròn thay vì giá trị cố định
+            );
 
             if (result.success) {
-                setMessage("Token và nft đã được gửi thành công!");
+                setMessage(`Token và NFT đã được gửi thành công! Bạn nhận được ${roundedScore} token cho bài thi này.`);
             }
         } catch (error) {
             console.error('Error:', error);
