@@ -15,8 +15,6 @@ import BuyNFT from "./views/BuyNFT";
 import { CreateToken } from "./components/CreateToken.js";
 import Marketplace from "./views/Marketplace.jsx";
 
-
-
 function App() {
   return (
     <div className="App">
@@ -33,7 +31,7 @@ function App() {
             <Route path="/CreateUniqueAsset" element={<CreateUniqueAsset />} />
             <Route path="/listNFT" element={<ListNFT />} />
             <Route path="/buyNFT" element={<BuyNFT />} />
-            <Route path="/create-token" element={<CreateToken/>} />
+            {/* <Route path="/create-token" element={<CreateToken/>} /> */}
             <Route path="/marketplace" element={<Marketplace />} />
           </Route>
         </Routes>

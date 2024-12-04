@@ -42,8 +42,7 @@ const ListNFT = () => {
         },
         headers: {
           accept: "application/json",
-          "x-api-key":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI5ZDE3NDg3MS01MDdjLTQyYWEtODU5ZS1kMmFiNDRjY2U5ZDEiLCJzdWIiOiI4OGQzOGNiNi1hOTI1LTRlMDQtYWExMC1mZTJmMDBhYWQ4YzIiLCJpYXQiOjE3MzE0Nzk0NjN9.1yYN2JyuD9SIiCPp1aaPa8MXtqZlJEAyiQ6Q8oA8Zic",
+          "x-api-key": process.env.REACT_APP_X_API_KEY,
         },
       };
 
@@ -145,9 +144,9 @@ const ListNFT = () => {
                   <Typography variant="h6" gutterBottom>
                     {nft.name}
                   </Typography>
-                  {nft.priceCents !== null && (
+                  {nft.price !== null && (
                     <Chip
-                      label={`${nft.priceCents / 100} USDC`}
+                      label={`${nft.price.naturalAmount} USDC`}
                       color="primary"
                       size="small"
                     />
